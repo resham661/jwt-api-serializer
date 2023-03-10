@@ -3,27 +3,27 @@ class UsersController < ApplicationController
     @user = User.create(user_params)
 
     if @user.valid?
-        token = encode_token({ user_id: @user.id })
-        render json: @user, token: token, status: :created
+      token = encode_token({ user_id: @user.id })
+      render json: @user, token: token, status: :created
     else
-        render json: { error: 'Invalid username or password' }, status: :unprocessable_entity
+      render json: { error: 'Invalid username or password' }, status: :unprocessable_entity
     end
-end
+  end
 
-def login
+  def login
     @user =  User.find_by(username: user_params[:username])
 
     if @user && @user.authenticate(user_params[:password])
-        token = encode_token({ user_id: @user.id })
-        render json: @user, token: token, status: :ok
+      token = encode_token({ user_id: @user.id })
+      render json: @user, token: token, status: :ok
     else
-        render json: { error: 'Invalid username or password' }, status: :unprocessable_entity
+      render json: { error: 'Invalid username or password' }, status: :unprocessable_entity
     end
-end
+  end
 
-private
+  private
 
-def user_params
-    params.require(:user).permit(:username, :password)
-end
+    def user_params
+      params.require(:user).permit(:username, :password)
+    end
 end
